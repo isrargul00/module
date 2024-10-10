@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+         <field name="name">res.config.settings.view.form.clv.api</field>
+         <field name="model">res.config.settings</field>
+         <field name="priority" eval="15"/>
+         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+         <field name="arch" type="xml">
+             <xpath expr="//form" position="inside">
+                 <app data-string="Warehouse 15" string="Warehouse 15" data-key="clv_api" name="clv_api">
+                     <field name="clv_warehouse15_connected" invisible="True"/>
+                     <field name="clv_check_connection_failed" invisible="True"/>
+                     <div invisible="clv_warehouse15_connected">
+                         <block title="Setup Warehouse 15" name="setup_warehouse_container">
+                             <div>
+                                 Complete the following steps to finish the installation process:<br/>
+                                 <br/>
+                                 1. <a type="object" name="create_cleverence_account_action"><span style="color: #3B88F7;">Create</span><img src="/clv_api/static/images/link.svg" alt="External link icon" style="height: 0.75em; vertical-align: baseline; margin-left: 5px; margin-right: 5px;"/></a> the Cleverence account or <a type="object" name="login_cleverence_account_action"><span style="color: #3B88F7;">login</span><img src="/clv_api/static/images/link.svg" alt="External link icon" style="height: 0.75em; vertical-align: baseline; margin-left: 5px; margin-right: 5px;"/></a><br/>
+                                 2. Install the Warehouse 15 server app<br/>
+                                 3. Complete connection wizard<br/>
+                                 4. After successfully connecting with Odoo return to this page and click “Check connection”<br/>
+                                 <br/>
+                                 <button name="check_connection_action" type="object" string="Check connection" class="btn-primary"/>
+                             </div>
+                             <div style="color: red;" invisible="not clv_check_connection_failed">
+                                 The connection is not set up.<br/>
+                                 Complete all steps and try again.
+                             </div>
+                         </block>
+                     </div>
+                     <div invisible="not clv_warehouse15_connected">
+                         <block title="Settings" name="settings_container">
+                             <setting id="clv_locations_settings" help="Enable the scanning of locations on a mobile device. If disabled, locations will be automatically filled from the document header.">
+                                 <field name="clv_default_scan_locations"/>
+                             </setting>
+                             <setting id="clv_allow_only_lowest_level_locations" help="Only end locations without sub-locations will be allowed.">
+                                 <field name="clv_allow_only_lowest_level_locations"/>
+                             </setting>
+                             <setting id="clv_backorders_settings" help="This setting applies to Receiving and Pick. Submitting a document from a mobile device will automatically generate a backorder when applicable.">
+                                 <field name="clv_auto_create_backorders"/>
+                             </setting>
+                             <setting id="clv_receiving_settings" help="This setting applies to Receiving and Pick. Temporary serial numbers will be generated for document lines where actual scanning did not occur.">
+                                 <field name="clv_use_fake_serials_in_receiving"/>
+                             </setting>
+                             <setting id="clv_shipping_settings" help="This setting applies to Ship. Document lines with actual quantities greater than zero will not be ignored during mobile document generation, allowing not only to display how much is left, but also how much is already prepared for shipping.">
+                                 <field name="clv_ship_expected_actual_lines"/>
+                             </setting>
+                         </block>
+                         <block title="Databases Info" name="databases_info_container" invisible="True">
+                         </block>
+                         <block title="Useful Links" name="useful_links_container">
+                             <div>
+                                 <a type="object" name="open_video_manuals_link_action">
+                                     <span style="color: #3B88F7;">Video Manuals</span>
+                                     <img src="/clv_api/static/images/link.svg" alt="External link icon" style="height: 0.75em; vertical-align: baseline; margin-left: 5px; margin-right: 5px;"/>
+                                 </a>
+                             </div>
+                             <div>
+                                 <a type="object" name="open_technical_support_link_action">
+                                     <span style="color: #3B88F7;">Technical Support</span>
+                                     <img src="/clv_api/static/images/link.svg" alt="External link icon" style="height: 0.75em; vertical-align: baseline; margin-left: 5px; margin-right: 5px;"/>
+                                 </a>
+                             </div>
+                             <div>
+                                 <a type="object" name="open_documentation_link_action">
+                                     <span style="color: #3B88F7;">Documentation</span>
+                                     <img src="/clv_api/static/images/link.svg" alt="External link icon" style="height: 0.75em; vertical-align: baseline; margin-left: 5px; margin-right: 5px;"/>
+                                 </a>
+                             </div>
+                             <div>
+                                 <a type="object" name="open_our_contacts_link_action">
+                                     <span style="color: #3B88F7;">Our Contacts</span>
+                                     <img src="/clv_api/static/images/link.svg" alt="External link icon" style="height: 0.75em; vertical-align: baseline; margin-left: 5px; margin-right: 5px;"/>
+                                 </a>
+                             </div>
+                             <div>
+                                 <a type="object" name="open_cleverence_link_action">
+                                     <span style="color: #3B88F7;">cleverence.com</span>
+                                     <img src="/clv_api/static/images/link.svg" alt="External link icon" style="height: 0.75em; vertical-align: baseline; margin-left: 5px; margin-right: 5px;"/>
+                                 </a>
+                             </div>
+                         </block>
+                     </div>
+                 </app>
+             </xpath>
+         </field>
+     </record>
+
+    <record id="action_clv_api_general_config" model="ir.actions.act_window">
+                <field name="name">Warehouse 15 settings</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">res.config.settings</field>
+                <field name="view_mode">form</field>
+                <field name="target">inline</field>
+                <field name="context">{'module' : 'clv_api'}</field>
+    </record>
+
+    <menuitem id="menu_clv_api_settings"
+              name="Warehouse 15"
+              sequence="0"
+              action="action_clv_api_general_config"
+              groups="base.group_system"
+              web_icon="clv_api,static/description/icon.png"/>
+</odoo>
